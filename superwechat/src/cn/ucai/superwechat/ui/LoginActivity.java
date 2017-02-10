@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
+import cn.ucai.superwechat.utils.EaseCommonUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,11 +39,13 @@ import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWechatApplication;
 import cn.ucai.superwechat.SuperWechatHelper;
-import cn.ucai.superwechat.db.DemoDBManager;
+import cn.ucai.superwechat.db.SuperWechatDBManager;
 import cn.ucai.superwechat.domain.Result;
+import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.net.NetDao;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.L;
+import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.utils.OkHttpUtils;
 import cn.ucai.superwechat.utils.ResultUtils;
@@ -58,13 +60,14 @@ public class LoginActivity extends BaseActivity {
     EditText usernameEditText;
     @BindView(R.id.et_login_password)
     EditText passwordEditText;
-    String currentUsername;
-    String currentPassword;
-    ProgressDialog pd;
     @BindView(R.id.img_back)
     ImageView imgBack;
     @BindView(R.id.text_title)
     TextView textTitle;
+    String currentUsername;
+    String currentPassword;
+    ProgressDialog pd;
+
 
 
     private boolean progressShow;
@@ -155,7 +158,7 @@ public class LoginActivity extends BaseActivity {
 
         // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
         // close it before login to make sure DemoDB not overlap
-        DemoDBManager.getInstance().closeDB();
+        SuperWechatDBManager.getInstance().closeDB();
 
         // reset current user name before login
         SuperWechatHelper.getInstance().setCurrentUserName(currentUsername);
@@ -165,16 +168,17 @@ public class LoginActivity extends BaseActivity {
         Log.d(TAG, "EMClient.getInstance().login");
         loginAppServer();
     }
-
     private void loginAppServer() {
         NetDao.Login(this, currentUsername, currentPassword, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String result) {
                 if (result != null) {
-                    Result resultFromJson = ResultUtils.getResultFromJson(result, String.class);
+                    L.e(TAG,"loginAppServer.result="+result);
+                    Result resultFromJson = ResultUtils.getResultFromJson(result, User.class);
                     if (resultFromJson != null) {
                         pd.dismiss();
                         L.e(TAG, "loginAppServer.resultFromJson=" + resultFromJson);
+                        L.e(TAG, "loginAppServer.resultFromJson.getRetCode=" + resultFromJson.getRetCode());
                         loginEMServer();
                     } else {
                         pd.dismiss();
@@ -183,6 +187,7 @@ public class LoginActivity extends BaseActivity {
 
 
                         } else if (resultFromJson.getRetCode() == I.MSG_LOGIN_ERROR_PASSWORD) {
+
                             CommonUtils.showShortToast("账户密码错误");
                         }
                     }
@@ -208,35 +213,11 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void loginEMServer() {
-        EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
-
+        EMClient.getInstance().login(currentUsername, MD5.getMessageDigest(currentPassword), new EMCallBack() {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "login: onSuccess");
-
-
-                // ** manually load all local groups and conversation
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-
-                // update current user's display name for APNs
-                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-                        SuperWechatApplication.currentUserNick.trim());
-                if (!updatenick) {
-                    Log.e("LoginActivity", "update current user nick fail");
-                }
-
-                if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
-                    pd.dismiss();
-                }
-                // get user's info (this should be get from App's server or 3rd party service)
-                SuperWechatHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-
-                Intent intent = new Intent(LoginActivity.this,
-                        MainActivity.class);
-                startActivity(intent);
-
-                finish();
+                loginSuccess();
             }
 
             @Override
@@ -261,15 +242,40 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    private void loginSuccess() {
+        // ** manually load all local groups and conversation
+        EMClient.getInstance().groupManager().loadAllGroups();
+        EMClient.getInstance().chatManager().loadAllConversations();
 
-    /**
-     * register
-     *
-     * @param view
-     */
-    public void register(View view) {
-        startActivityForResult(new Intent(this, RegisterActivity.class), 0);
+        // update current user's display name for APNs
+        boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                SuperWechatApplication.currentUserNick.trim());
+        if (!updatenick) {
+            Log.e("LoginActivity", "update current user nick fail");
+        }
+
+        if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
+            pd.dismiss();
+        }
+        // get user's info (this should be get from App's server or 3rd party service)
+        SuperWechatHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo(this);
+
+        Intent intent = new Intent(LoginActivity.this,
+                MainActivity.class);
+        startActivity(intent);
+
+        finish();
     }
+
+
+//    /**
+//     * register
+//     *
+//     * @param view
+//     */
+//    public void register(View view) {
+//        startActivityForResult(new Intent(this, RegisterActivity.class), 0);
+//    }
 
     @Override
     protected void onResume() {
