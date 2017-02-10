@@ -37,7 +37,6 @@ public class MFGT {
         context.startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
-
     public static void gotoLogin(Activity activity) {
         startActivity(activity, LoginActivity.class);
 
