@@ -20,9 +20,11 @@ import cn.ucai.superwechat.domain.Result;
  * Created by clawpo on 2016/9/21.
  */
 public class ResultUtils {
+    private static final String TAG = ResultUtils.class.getSimpleName();
     public static <T> Result getResultFromJson(String jsonStr,Class<T> clazz){
         Result result = new Result();
         try {
+            L.e(TAG,"getResultFromJson.json="+jsonStr);
             JSONObject jsonObject = new JSONObject(jsonStr);
             result.setRetCode(jsonObject.getInt("retCode"));
             result.setRetMsg(jsonObject.getBoolean("retMsg"));
@@ -33,8 +35,9 @@ public class ResultUtils {
                     String date;
                     try {
                         date = URLDecoder.decode(jsonRetData.toString(), I.UTF_8);
-                        Log.e("Utils", "jsonRetData=" + date);
+                        Log.e("Utils", "date=" + date);
                         T t = new Gson().fromJson(date, clazz);
+                        L.e(TAG,"result1="+t);
                         result.setRetData(t);
                         return result;
 
@@ -50,6 +53,7 @@ public class ResultUtils {
         }catch (Exception e){
             e.printStackTrace();
         }
+        L.e(TAG,"result="+result);
         return  null;
     }
 
