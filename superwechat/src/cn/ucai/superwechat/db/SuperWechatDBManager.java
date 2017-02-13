@@ -19,17 +19,17 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-public class DemoDBManager {
-    static private DemoDBManager dbMgr = new DemoDBManager();
+public class SuperWechatDBManager {
+    static private SuperWechatDBManager dbMgr = new SuperWechatDBManager();
     private DbOpenHelper dbHelper;
     
-    private DemoDBManager(){
+    private SuperWechatDBManager(){
         dbHelper = DbOpenHelper.getInstance(SuperWechatApplication.getInstance().getApplicationContext());
     }
     
-    public static synchronized DemoDBManager getInstance(){
+    public static synchronized SuperWechatDBManager getInstance(){
         if(dbMgr == null){
-            dbMgr = new DemoDBManager();
+            dbMgr = new SuperWechatDBManager();
         }
         return dbMgr;
     }
