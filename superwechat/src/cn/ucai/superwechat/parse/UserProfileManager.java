@@ -1,12 +1,22 @@
 package cn.ucai.superwechat.parse;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.nfc.Tag;
 
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import cn.ucai.superwechat.SuperWechatHelper;
 import cn.ucai.superwechat.SuperWechatHelper.DataSyncListener;
+import cn.ucai.superwechat.domain.Result;
+import cn.ucai.superwechat.domain.User;
+import cn.ucai.superwechat.net.NetDao;
+import cn.ucai.superwechat.utils.L;
+import cn.ucai.superwechat.utils.OkHttpUtils;
 import cn.ucai.superwechat.utils.PreferenceManager;
+import cn.ucai.superwechat.utils.ResultUtils;
+
 import com.hyphenate.easeui.domain.EaseUser;
 
 import java.util.ArrayList;
@@ -33,6 +43,8 @@ public class UserProfileManager {
 	private boolean isSyncingContactInfosWithServer = false;
 
 	private EaseUser currentUser;
+
+	private static final String TAG = UserProfileManager.class.getSimpleName();
 
 	public UserProfileManager() {
 	}
@@ -140,7 +152,7 @@ public class UserProfileManager {
 		return avatarUrl;
 	}
 
-	public void asyncGetCurrentUserInfo() {
+	public void asyncGetCurrentUserInfo(Activity activity) {
 		ParseManager.getInstance().asyncGetCurrentUserInfo(new EMValueCallBack<EaseUser>() {
 
 			@Override
@@ -152,7 +164,29 @@ public class UserProfileManager {
 			}
 
 			@Override
-			public void onError(int error, String errorMsg) {
+				public void onError(int error, String errorMsg) {
+
+				}
+		});
+		L.e(TAG,"asyncGetCurrentUserInfo.CurrentUser="+EMClient.getInstance().getCurrentUser());
+		NetDao.getUserInfoByUsername(activity, EMClient.getInstance().getCurrentUser(),
+				new OkHttpUtils.OnCompleteListener<String>() {
+			@Override
+			public void onSuccess(String s) {
+				if (s != null) {
+					Result result = ResultUtils.getResultFromJson(s, User.class);
+					if (result != null&&result.isRetMsg()) {
+
+
+					}
+				}
+
+
+			}
+
+			@Override
+			public void onError(String error) {
+				L.e(TAG,"error="+error);
 
 			}
 		});
