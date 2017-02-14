@@ -9,6 +9,7 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import cn.ucai.superwechat.SuperWechatHelper;
 import cn.ucai.superwechat.SuperWechatHelper.DataSyncListener;
+import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.Result;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.net.NetDao;
@@ -158,8 +159,8 @@ public class UserProfileManager {
 			@Override
 			public void onSuccess(EaseUser value) {
 			    if(value != null){
-    				setCurrentUserNick(value.getNick());
-    				setCurrentUserAvatar(value.getAvatar());
+//    				setCurrentUserNick(value.getNick());
+//    				setCurrentUserAvatar(value.getAvatar());
 			    }
 			}
 
@@ -176,6 +177,8 @@ public class UserProfileManager {
 				if (s != null) {
 					Result result = ResultUtils.getResultFromJson(s, User.class);
 					if (result != null&&result.isRetMsg()) {
+						User user= (User) result.getRetData();
+						setCurrentUserNick(user.getMUserNick());
 
 
 					}
