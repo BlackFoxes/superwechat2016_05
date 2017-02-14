@@ -29,6 +29,17 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 			+ UserDao.COLUMN_NAME_NICK + " TEXT, "
 			+ UserDao.COLUMN_NAME_AVATAR + " TEXT, "
 			+ UserDao.COLUMN_NAME_ID + " TEXT PRIMARY KEY);";
+
+
+	private static final String USER_TABLE_CREATE = "CREATE TABLE "
+			+ UserDao.USER_TABLE_NAME + " ("
+			+ UserDao.USER_COLUMN_NAME + " TEXT PRIMARY KEY, "
+			+ UserDao.USER_COLUMN_NAME_NICK + " TEXT, "
+			+ UserDao.USER_COLUMN_NAME_AVATAR_ID + " INTEGER, "
+			+ UserDao.USER_COLUMN_NAME_AVATAR_PATH + " TEXT, "
+			+ UserDao.USER_COLUMN_NAME_AVATAR_SUFFIX + " TEXT, "
+			+ UserDao.USER_COLUMN_NAME_AVATAR_TYPE + " INTEGER, "
+			+ UserDao.USER_COLUMN_NAME_AVATAR_UPDATE_TIME + " TEXT );";
 	
 	private static final String INIVTE_MESSAGE_TABLE_CREATE = "CREATE TABLE "
 			+ InviteMessgeDao.TABLE_NAME + " ("
@@ -75,6 +86,7 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 		db.execSQL(INIVTE_MESSAGE_TABLE_CREATE);
 		db.execSQL(CREATE_PREF_TABLE);
 		db.execSQL(ROBOT_TABLE_CREATE);
+		db.execSQL(USER_TABLE_CREATE);
 		
 	}
 
