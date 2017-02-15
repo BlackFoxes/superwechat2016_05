@@ -4,6 +4,7 @@ import android.content.Context;
 
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.RobotUser;
+import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -298,5 +299,21 @@ public class SuperWechatModel {
         SpakerOn,
         DisabledGroups,
         DisabledIds
+    }
+
+    public boolean saveAppContactList(List<User> contactList) {
+        UserDao dao = new UserDao(context);
+        dao.saveAppContactList(contactList);
+        return true;
+    }
+
+    public Map<String, User> getAppContactList() {
+        UserDao dao = new UserDao(context);
+        return dao.getAppContactList();
+    }
+
+    public void saveAppContact(User user){
+        UserDao dao = new UserDao(context);
+        dao.saveAppContact(user);
     }
 }
