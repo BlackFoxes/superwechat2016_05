@@ -1284,9 +1284,6 @@ public class SuperWechatHelper {
         isGroupAndContactListenerRegisted = false;
 
         setContactList(null);
-        setAppContactList(new HashMap<String, User>() {
-
-        });
         setRobotList(null);
         getUserProfileManager().reset();
         SuperWechatDBManager.getInstance().closeDB();
@@ -1321,7 +1318,7 @@ public class SuperWechatHelper {
      * save single contact
      */
     public void saveAppContact(User user) {
-        appContactList.put(user.getMUserName(), user);
+        getaAppContactList().put(user.getMUserName(), user);
         superWechatModel.saveAppContact(user);
     }
 
@@ -1331,7 +1328,7 @@ public class SuperWechatHelper {
      * @return
      */
     public Map<String, User> getaAppContactList() {
-        if (isLoggedIn() && contactList == null) {
+        if (isLoggedIn() && appContactList == null) {
             appContactList = superWechatModel.getAppContactList();
         }
 
