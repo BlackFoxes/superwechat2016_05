@@ -851,7 +851,7 @@ public class SuperWechatHelper {
      * @param unbindDeviceToken whether you need unbind your device token
      * @param callback          callback
      */
-    public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
+        public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
         endCall();
         Log.d(TAG, "logout: " + unbindDeviceToken);
         EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
@@ -1285,6 +1285,7 @@ public class SuperWechatHelper {
 
         setContactList(null);
         setRobotList(null);
+        setAppContactList(null);
         getUserProfileManager().reset();
         SuperWechatDBManager.getInstance().closeDB();
     }
@@ -1338,6 +1339,19 @@ public class SuperWechatHelper {
         }
 
         return appContactList;
+    }
+    /**
+     * update user list to cache and database
+     *
+     * @param contactInfoList
+     */
+    public void updateAppContactList(List<User> contactInfoList) {
+        for (User u : contactInfoList) {
+            appContactList.put(u.getMUserName(), u);
+        }
+        ArrayList<User> mList = new ArrayList<User>();
+        mList.addAll(appContactList.values());
+        superWechatModel.saveAppContactList(mList);
     }
 
 }
