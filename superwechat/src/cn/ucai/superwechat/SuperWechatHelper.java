@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,7 +34,6 @@ import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.parse.UserProfileManager;
 import cn.ucai.superwechat.receiver.CallReceiver;
 import cn.ucai.superwechat.ui.ChatActivity;
@@ -51,23 +49,24 @@ import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
+import cn.ucai.superwechat.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class SuperWechatHelper {
+
+
     /**
      * data sync listener
      */
@@ -269,6 +268,11 @@ public class SuperWechatHelper {
             @Override
             public EaseUser getUser(String username) {
                 return getUserInfo(username);
+            }
+
+            @Override
+            public User getAppUser(String username) {
+                return getAppUserInfo(username);
             }
         });
 
@@ -768,6 +772,21 @@ public class SuperWechatHelper {
         if (user == null) {
             user = new EaseUser(username);
             EaseCommonUtils.setUserInitialLetter(user);
+        }
+        return user;
+    }
+
+
+    private User getAppUserInfo(String username) {
+        // To get instance of EaseUser, here we get it from the user list in memory
+        // You'd better cache it if you get it from your server
+        User user = null;
+        user = getAppContactList().get(username);
+
+        // if user is not in your contacts, set inital letter for him/her
+        if (user == null) {
+            user = new User(username);
+            EaseCommonUtils.setAppUserInitialLetter(user);
         }
         return user;
     }
@@ -1319,7 +1338,7 @@ public class SuperWechatHelper {
      * save single contact
      */
     public void saveAppContact(User user) {
-        getaAppContactList().put(user.getMUserName(), user);
+        getAppContactList().put(user.getMUserName(), user);
         superWechatModel.saveAppContact(user);
     }
 
@@ -1328,7 +1347,7 @@ public class SuperWechatHelper {
      *
      * @return
      */
-    public Map<String, User> getaAppContactList() {
+    public Map<String, User> getAppContactList() {
         if (isLoggedIn() && appContactList == null) {
             appContactList = superWechatModel.getAppContactList();
         }
