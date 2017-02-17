@@ -11,7 +11,6 @@ import cn.ucai.superwechat.SuperWechatHelper;
 import cn.ucai.superwechat.SuperWechatHelper.DataSyncListener;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.Result;
-import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.net.NetDao;
 import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.OkHttpUtils;
@@ -19,6 +18,7 @@ import cn.ucai.superwechat.utils.PreferenceManager;
 import cn.ucai.superwechat.utils.ResultUtils;
 
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;

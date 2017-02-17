@@ -9,10 +9,11 @@ import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.SuperWechatApplication;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.domain.User;
 
 import com.hyphenate.easeui.domain.EaseUser;
 import cn.ucai.superwechat.utils.EaseCommonUtils;
+
+import com.hyphenate.easeui.domain.User;
 import com.hyphenate.util.HanziToPinyin;
 
 import java.util.ArrayList;
