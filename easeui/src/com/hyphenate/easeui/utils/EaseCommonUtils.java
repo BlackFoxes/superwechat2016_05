@@ -157,7 +157,7 @@ public class EaseCommonUtils {
     public static void setUserInitialLetter(EaseUser user) {
         final String DefaultLetter = "#";
         String letter = DefaultLetter;
-        
+
         final class GetInitialLetter {
             String getLetter(String name) {
                 if (TextUtils.isEmpty(name)) {
@@ -181,17 +181,18 @@ public class EaseCommonUtils {
                 return DefaultLetter;
             }
         }
-        
+
         if ( !TextUtils.isEmpty(user.getNick()) ) {
             letter = new GetInitialLetter().getLetter(user.getNick());
             user.setInitialLetter(letter);
             return;
-        } 
+        }
         if (letter.equals(DefaultLetter) && !TextUtils.isEmpty(user.getUsername())) {
             letter = new GetInitialLetter().getLetter(user.getUsername());
         }
         user.setInitialLetter(letter);
     }
+
 
 
   
