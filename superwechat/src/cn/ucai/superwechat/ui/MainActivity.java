@@ -144,16 +144,13 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     private void initFragment() {
         conversationListFragment = new ConversationListFragment();
         contactListFragment = new ContactListFragment();
-        SettingsFragment settingFragment = new SettingsFragment();
-        fragments = new Fragment[]{conversationListFragment, contactListFragment, settingFragment};
-//		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationListFragment)
-//				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
-//				.commit();
+        ProfileFragment profileFragment = new ProfileFragment();
+
         adapter = new MainTabAdpter(getSupportFragmentManager());
         adapter.addFragment(conversationListFragment,"微信");
         adapter.addFragment(contactListFragment,"通讯录");
         adapter.addFragment(new DiscoverFragment(),"发现");
-        adapter.addFragment(settingFragment,"我");
+        adapter.addFragment(profileFragment,"我");
         mLayoutViewpage.setAdapter(adapter);
         mLayoutViewpage.setCurrentItem(0);
         mLayoutTabhost.setChecked(0);
@@ -175,7 +172,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     private void checkAccount(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
             SuperWechatHelper.getInstance().logout(false, null);
-            finish();
+            finish();   
             startActivity(new Intent(this, LoginActivity.class));
             return;
         } else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
