@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
+import cn.ucai.superwechat.utils.L;
+
 public class DMTabHost extends LinearLayout implements OnClickListener {
     public DMTabHost(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,6 +34,7 @@ public class DMTabHost extends LinearLayout implements OnClickListener {
 
     private void setChecked(int position, boolean byUser) {
         int count = getChildCount();
+        L.e("DMTabHost", "count=" + count);
         for (int i = 0; i < count; i++) {
             View view = getChildAt(i);
             if (view instanceof DMTabButton || view instanceof DMTabTextView) {
