@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.ui.GuideActivity;
 import cn.ucai.superwechat.ui.LoginActivity;
+import cn.ucai.superwechat.ui.ProfileFragment;
 import cn.ucai.superwechat.ui.RegisterActivity;
 import cn.ucai.superwechat.ui.SettingsActivity;
+import cn.ucai.superwechat.ui.UserProfileActivity;
 
 
 /**
@@ -44,6 +46,13 @@ public class MFGT {
 
     }
 
+    public static void gotoLoginCleanTask(Activity activity) {
+        startActivity(activity,new Intent(activity,LoginActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK));
+
+
+    }
+
     public static void gotoRegister(Activity activity) {
         startActivity(activity, RegisterActivity.class);
     }
@@ -55,5 +64,11 @@ public class MFGT {
 
     public static void gotoSettings(FragmentActivity activity) {
         startActivity(activity, SettingsActivity.class);
+    }
+
+    public static void gotoUserprofile(Activity profileFragment) {
+        startActivity(profileFragment, UserProfileActivity.class);
+
+
     }
 }
