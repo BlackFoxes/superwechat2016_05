@@ -38,6 +38,7 @@ import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWechatModel;
 import cn.ucai.superwechat.utils.EaseCommonUtils;
+import cn.ucai.superwechat.utils.MFGT;
 
 /**
  * settings screen
@@ -163,6 +164,7 @@ public class ProfileFragment extends Fragment {
                 RedPacketUtil.startChangeActivity(getActivity());
                 break;
             case R.id.tv_profile_settings:
+                MFGT.gotoSettings(getActivity());
                 break;
         }
     }
