@@ -112,10 +112,10 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.em_activity_main);
+        ButterKnife.bind(this);
         savePower();
         checkAccount(savedInstanceState);
-        setContentView(R.layout.em_activity_main);
-            ButterKnife.bind(this);
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
         initView();
@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     private void checkAccount(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
             SuperWechatHelper.getInstance().logout(false, null);
-            finish();   
+            finish();
             startActivity(new Intent(this, LoginActivity.class));
             return;
         } else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {

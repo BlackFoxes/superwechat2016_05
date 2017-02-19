@@ -3,6 +3,7 @@ package cn.ucai.superwechat.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.baidu.platform.comapi.map.I;
@@ -13,6 +14,7 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.ui.GuideActivity;
 import cn.ucai.superwechat.ui.LoginActivity;
 import cn.ucai.superwechat.ui.RegisterActivity;
+import cn.ucai.superwechat.ui.SettingsActivity;
 
 
 /**
@@ -51,4 +53,7 @@ public class MFGT {
 
     }
 
+    public static void gotoSettings(FragmentActivity activity) {
+        startActivity(activity, SettingsActivity.class);
+    }
 }
